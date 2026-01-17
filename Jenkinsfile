@@ -13,14 +13,14 @@ pipeline {
         }
 
         stage('Install & Test') {
-            steps {
-              sh 'docker run --rm -v "$PWD":/app -w /app node:22-alpine sh -lc "npm ci && npm test"'
-            }
-        }
+          steps {
+              sh '/usr/local/bin/docker run --rm -v "$PWD":/app -w /app node:22-alpine sh -lc "npm ci && npm test"'
+          }
+}
 
         stage('Docker Build') {
             steps {
-                sh "docker build -t ${IMAGE_NAME}:${env.BUILD_NUMBER} ."
+                sh '/usr/local/bin/docker build -t ${IMAGE_NAME}:${env.BUILD_NUMBER} .'
             }
         }
 
