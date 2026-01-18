@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "cepoumian/jenkins-node-demo"
+        DOCKERHUB = credentials('dockerhub')
     }
 
     stages {
@@ -21,6 +22,16 @@ pipeline {
         stage('Docker Build') {
             steps {
                 sh "docker build -t ${IMAGE_NAME}:${env.BUILD_NUMBER} ."
+            }
+        }
+
+        stage('Push Image') {
+            steps {
+              sh """
+                  echo "${DOCKERHUB_PSW}" | docker login -u "${DOCKERHUB_USR}" --password-stdin
+                  docker push ${IMAGE_NAME}:${env.BUILD_NUMBER}
+                  docker logout
+                """
             }
         }
 
