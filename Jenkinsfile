@@ -35,6 +35,15 @@ pipeline {
             }
         }
 
+        stage('Deploy') {
+            steps {
+                sh """
+                    docker rm -f jenkins-node-demo || true
+                    docker run -d --name jenkins-node-demo -p 3000:3000 ${IMAGE_NAME}:${env.BUILD_NUMBER}
+                """
+            }
+        }
+
         // Opcional:
         // stage('Run container') {
         //     steps {
